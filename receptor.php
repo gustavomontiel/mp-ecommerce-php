@@ -15,6 +15,15 @@
             break;
     }
 
+    // Log
+    $log  = " - topic: ".$_GET['topic'].PHP_EOL.
+    " - id: ".$_GET['id'].PHP_EOL.
+    " - preference_id: ".$merchant_order->preference_id.PHP_EOL.
+    " - payment_id: ".$merchant_order->payments[0]->id.PHP_EOL.
+    " - ".date("F j, Y, g:i a").PHP_EOL.
+    "-------------------------------------------------------------------------------".PHP_EOL;
+    file_put_contents('./log.txt', $log, FILE_APPEND);
+
     $paid_amount = 0;
     foreach ($merchant_order->payments as $payment) {
         if ($payment->status == 'approved'){
@@ -35,12 +44,6 @@
         print_r("Pago total no realizado.");
     }
 
-    $log  = " - topic: ".$_GET['topic'].PHP_EOL.
-    " - id: ".$_GET['id'].PHP_EOL.
-    " - preference_id: ".$merchant_order->preference_id.PHP_EOL.
-    " - payment_id: ".$payment->id.PHP_EOL.
-    " - ".date("F j, Y, g:i a").PHP_EOL.
-    "-------------------------------------------------------------------------------".PHP_EOL;
-    file_put_contents('./log.txt', $log, FILE_APPEND);
+    
 
 ?>
