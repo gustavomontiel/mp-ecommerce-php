@@ -35,8 +35,4 @@
         print_r("Pago total no realizado.");
     }
 
-    $log  = "topic: ".$_GET['topic'].' - '."id: ".$_GET['id'].' - '.date("F j, Y, g:i a").PHP_EOL.
-        "----------------------------------------------------".PHP_EOL;
-    file_put_contents('./log_'.date("j.n.Y").'.log', $log, FILE_APPEND);
-
 ?>
