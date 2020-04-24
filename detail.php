@@ -100,15 +100,12 @@
                                             <div class="clearfix image-list xs-no-js as-util-relatedlink relatedlink" data-relatedlink="6|Powerbeats3 Wireless Earphones - Neighborhood Collection - Brick Red|MPXP2">
                                                 <div class="as-tilegallery-element as-image-selected">
                                                     <div class=""></div>
-                                                    <img src="./assets/003.jpg" class="ir ir item-image as-producttile-image" alt="" width="445" height="445" style="content:-webkit-image-set(url(<?php echo $_POST['img'] ?>) 2x);">
+                                                    <img src="<?php echo $_POST['img'] ?>" class="ir ir item-image as-producttile-image" alt="" width="445" height="445" style="content:-webkit-image-set(url(<?php echo $_POST['img'] ?>) 2x);">
                                                 </div>
                                                 
                                             </div>
-
                                             
                                         </div>
-
-                                        
 
                                     </div>
 
@@ -124,10 +121,10 @@
                                             </h3>
                                         </div>
                                         <h3 >
-                                            <?php echo $_POST['price'] ?>
+                                            <?php echo "$  " . $_POST['price'] ?>
                                         </h3>
                                         <h3 >
-                                            <?php echo "$" . $_POST['unit'] ?>
+                                            <?php echo $_POST['unit'] ?>
                                         </h3>
                                     </div>
 <!-- ************** INICIO CODIGO DE INTEGRACION ************** -->      
@@ -139,9 +136,10 @@
 <?php
 // SDK de Mercado Pago
 require __DIR__ .  '/vendor/autoload.php';
+$urlHost = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" . "://$_SERVER[HTTP_HOST]";
 
 // Agrega credenciales
-MercadoPago\SDK::setAccessToken('APP_USR-6317427424180639-090914-5c508e1b02a34fcce879a999574cf5c9-469485398');
+MercadoPago\SDK::setAccessToken('APP_USR-6317427424180639-042406-6aee9711d6bc4207c2dc79590031b6f0-469485398');
 
 // Crea un objeto de preferencia
 $preference = new MercadoPago\Preference();
@@ -162,20 +160,24 @@ $preference->payment_methods = array(
   $payer->name = "Lalo";
   $payer->surname = "Landa";
   $payer->email = "test_user_63274575@testuser.com";
+  
   $date = date('c');
   $payer->date_created = $date;
+  $payer->identification = array(
+    "type" => "DNI",
+    "number" => "22333444"
+  );
   $payer->phone = array(
     "area_code" => "011",
-    "number" => "2222-3333"
+    "number" => "22223333"
   );
   $payer->address = array(
     "street_name" => "Falsa",
     "street_number" => 123,
     "zip_code" => "1111"
   );
+  
   $preference->payer = $payer;
-
-  $urlHost = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http" . "://$_SERVER[HTTP_HOST]";
 
   // ITEM
   $item = new MercadoPago\Item();
@@ -192,17 +194,11 @@ $preference->payment_methods = array(
 
   // URLS DE VUELTA
   $preference->back_urls = array(
-    "success" => $urlHost . "/resp_success",
-    "failure" => $urlHost . "/resp_failure",
-    "pending" => $urlHost . "/resp_pending"
+    "success" => $urlHost . "/retorno.php",
+    "failure" => $urlHost . "/retorno.php",
+    "pending" => $urlHost . "/retorno.php"
   );
-  
-  $preference->back_urls = array(
-    "success" => "https://www.google.com/",
-    "failure" => "https://www.google.com.br/",
-    "pending" => "https://www.google.com.ar/"
-  );
-  
+ 
   $preference->auto_return = "approved";
  
   // URLS DE NOTIFICACION
@@ -210,7 +206,7 @@ $preference->payment_methods = array(
 
   $preference->save();
 ?>                                    
-<form action="" method="POST">
+<form action="/retorno.php" method="POST">
   <script
    src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js"
    data-preference-id="<?php echo $preference->id; ?>"
