@@ -37,7 +37,6 @@
 
     $log  = "topic: ".$_GET['topic'].' - '."id: ".$_GET['id'].' - '.date("F j, Y, g:i a").PHP_EOL.
         "----------------------------------------------------".PHP_EOL;
-    //Save string to log, use FILE_APPEND to append.
     file_put_contents('./log_'.date("j.n.Y").'.log', $log, FILE_APPEND);
 
 ?>

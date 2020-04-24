@@ -217,42 +217,57 @@
 
                             </div>
                             <div class="column small-12 as-search-results-tiles as-search-results-width">
+
     <!-- ************** INICIO CODIGO DE INTEGRACION ************** -->  
     <style>
         .mercadopago-button { padding: 0 1.7142857142857142em; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 0.875em; line-height: 2.7142857142857144; background: #2D3277; border-radius: 0.2857142857142857em; color: #fff; cursor: pointer; border: 0; }
     </style>    
-    <h3 class="">                                        
+                                            
     <?php
     require __DIR__ .  '/vendor/autoload.php';
+    MercadoPago\SDK::setAccessToken("APP_USR-6317427424180639-042406-6aee9711d6bc4207c2dc79590031b6f0-469485398");
     
-    if (isset($_POST['payment_status'])) {
-        $payment_status = $_POST['payment_status'];
+    if ( isset($_POST['payment_status']) ) {
+        $payment = MercadoPago\Payment::find_by_id($_POST["payment_id"]);
+        $merchant_order = MercadoPago\MerchantOrder::find_by_id($payment->order->id);
     } else {
-        MercadoPago\SDK::setAccessToken("APP_USR-6317427424180639-042406-6aee9711d6bc4207c2dc79590031b6f0-469485398");
-        $merchant_order_id = $_GET['merchant_order_id'];
-        $merchant_order = MercadoPago\MerchantOrder::find_by_id($merchant_order_id);
-        $payment_status = $merchant_order->payments[0]->status;        
+        $merchant_order = MercadoPago\MerchantOrder::find_by_id($_GET['merchant_order_id']);
+        $payment = $merchant_order->payments[0];
     }
 
-    switch ($payment_status) {
+    switch ( $payment->status ) {
         case "pending":
-            echo "Su pago se encuentra pendiente de confirmación";
+            echo "<h3>Su pago se encuentra pendiente de confirmación</h3>". 
+            "Id método de pago: ". $payment->payment_method_id . ".<br>". 
+            "Monto pagado: ". $payment->transaction_amount . ".<br>". 
+            "Número de orden: ". $merchant_order->id . ".<br>". 
+            "Número de pago: ". $payment->id . ".";
+            break;
+        case "in_process":
+            echo "<h3>Su pago se encuentra en proceso</h3>". 
+            "Id método de pago: ". $payment->payment_method_id . ".<br>". 
+            "Monto pagado: ". $payment->transaction_amount . ".<br>". 
+            "Número de orden: ". $merchant_order->id . ".<br>". 
+            "Número de pago: ". $payment->id . ".";
             break;
         case "approved":
-            echo "Su pago fué aprobado";
+            echo "<h3>Su pago fué aprobado.</h3>". 
+                "Id método de pago: ". $payment->payment_method_id . ".<br>". 
+                "Monto pagado: ". $payment->transaction_amount . ".<br>". 
+                "Número de orden: ". $merchant_order->id . ".<br>". 
+                "Número de pago: ". $payment->id . ".";
             break;
         case "rejected":
-            echo "Su pago fué rechazado";
+            echo "<h3>Su pago fué rechazado</h3>";
             break;
-        case "failure":
-            echo "Su pago tuvo un problema";
-            break;
-    
-}
+        default:
+            echo "<h3>Su pago tuvo un problema</h3>";
+    }
     ?>                                  
-    </h3>  
+    <br> <br> 
     <button class="mercadopago-button" onclick="location.href='/index.php'">Volver a la tienda</button>
     <!-- ************** FIN CODIGO DE INTEGRACION ************** -->      
+    
                             </div>
                             <div class="column large-12 small-12">
                                 <div class="as-pagination-align">
