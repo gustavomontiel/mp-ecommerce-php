@@ -41,6 +41,6 @@
     " - payment_id: ".$payment->id.PHP_EOL.
     " - ".date("F j, Y, g:i a").PHP_EOL.
     "-------------------------------------------------------------------------------".PHP_EOL;
-    file_put_contents('./log_'.date("j.n.Y").'.log', $log, FILE_APPEND);
+    file_put_contents('./log.txt', $log, FILE_APPEND);
 
 ?>
