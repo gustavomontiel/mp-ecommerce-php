@@ -20,6 +20,7 @@
     " - id: ".$_GET['id'].PHP_EOL.
     " - preference_id: ".$merchant_order->preference_id.PHP_EOL.
     " - payment_id: ".$merchant_order->payments[0]->id.PHP_EOL.
+    " - payment_status: ".$merchant_order->payments[0]->status.PHP_EOL.
     " - ".date("F j, Y, g:i a").PHP_EOL.
     "-------------------------------------------------------------------------------".PHP_EOL;
     file_put_contents('./log.txt', $log, FILE_APPEND);
